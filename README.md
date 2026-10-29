@@ -1,0 +1,2 @@
+# BMW_SubSceen_Card
+基于UriRoute修改获取My BMW车辆信息并在小米背屏展示的组件
