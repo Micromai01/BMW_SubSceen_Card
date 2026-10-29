@@ -1,2 +1,4 @@
-# BMW_SubSceen_Card
-基于UriRoute修改获取My BMW车辆信息并在小米背屏展示的组件
+# 宝马车控 — REAREye背屏组件
+REAREye 背屏应用组件，显示宝马(i3)的车辆实时剩余电量及续航，支持车控操作
+# 功能
+# 信息卡片
