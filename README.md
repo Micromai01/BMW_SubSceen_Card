@@ -1,5 +1,7 @@
 # 宝马车控 — REAREye背屏组件
-为小米带背屏的设备制作的 BMW i3 车控卡片。卡片、图标、配套脚本与后台程序放在同一个组件包内。
+为Xiaomi带有背屏的设备制作的 BMW i3 车控卡片。卡片、图标、配套脚本与后台程序放在同一个组件包内。
+<img width="2250" height="1688" alt="retouch_2026102923293168_1793287789808edit" src="https://github.com/user-attachments/assets/90290d9d-68b9-45f9-bc91-a55bb522ecfc" />
+
 # 功能
 
 # 车辆信息
