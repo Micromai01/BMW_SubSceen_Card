@@ -1,0 +1,23 @@
+{
+  "type": "widget",
+  "name": "BMW i3 车控",
+  "business_setup": {
+    "id": "bmw_i3_cloud",
+    "renameable": false
+  },
+  "card_setup": {
+    "name": "BMW i3 车控",
+    "package": "hk.uwu.reareye",
+    "priority": 500,
+    "sticky": true,
+    "renameable": false
+  },
+  "requirements": {
+    "packages": [
+      "de.bmw.connected.mobile20.cn"
+    ]
+  },
+  "postinstall": {
+    "uri": "content://hk.uwu.reareye.script/component:{id}/bootstrap"
+  }
+}

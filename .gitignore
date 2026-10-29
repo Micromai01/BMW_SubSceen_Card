@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.signing/
+/repository/
+/BMW_*.zip
+/SHA256SUMS.txt

@@ -1,0 +1,47 @@
+{
+  "release": "3.5-cloud-beta.1",
+  "checked_date": "2026-10-29",
+  "repository": "https://github.com/Micromai01/BMW_SubSceen_Card",
+  "proposed_store_id": "bmw_i3_cloud",
+  "published": false,
+  "packaging": "REARStore widget ZIP with scripts/ and postinstall; no APK",
+  "passed_tests": {
+    "store_archive_and_contract": 6,
+    "actual_lua_and_generated_shell": 9,
+    "unchanged_worker_scheduler_regressions": 67,
+    "total": 82
+  },
+  "additional_checks": [
+    "Actual packaged Lua and MAML bridge runtime checks passed",
+    "Shell syntax checks passed",
+    "Root and release metadata match",
+    "Scripts unpack using inspected store algorithm"
+  ],
+  "initialization": [
+    "Detached local runtime setup",
+    "Preserve pause flag",
+    "Only runtime/scheduler/refresh actions",
+    "No immediate cloud telemetry or vehicle command",
+    "Idempotent version marker",
+    "Concurrent dispatch lock",
+    "Failure cooldown",
+    "Whitelist status outputs"
+  ],
+  "new_appvault_version_from_user": "25.41.86.00-10201055",
+  "new_appvault_patch_adaptation_verified": false,
+  "pending_phone_checks": [
+    "Store download",
+    "Postinstall provider invocation",
+    "Root mounting and SELinux",
+    "Switching to the new card",
+    "Initialization and authorization cache read",
+    "Long-term official widget renewal"
+  ],
+  "credentials_included": false,
+  "not_claimed": [
+    "Remote GitHub publishing",
+    "Cloud catalog inclusion",
+    "Always-on token renewal",
+    "New AppVault hook compatibility"
+  ]
+}

@@ -1,0 +1,363 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Widget frameRate="30" scaleByDensity="false" screenWidth="1080" version="2" useVariableUpdater="DateTime.Second">
+  <Var name="bmwHintUntil" type="number" expression="0" const="true" />
+  <Var name="bmwFrontBundleResult" type="number" expression="0" const="true" />
+  <Var name="bmwFrontDisplayResult" type="number" expression="0" const="true" />
+  <Var name="bmwFrontMakeResult" type="number" expression="0" const="true" />
+  <Var name="s" expression="min(#view_width/336,#view_height/210)" />
+  <Var name="page" type="number" expression="0" const="true" />
+  <Var name="hint" type="string" expression="'远程控车'" const="true" />
+  <Image src="hero.png" x="0" y="0" w="#view_width" h="#view_height" touchable="false" />
+  <Text x="(0.34*#view_width)" y="(0.085*#view_height)" size="(20*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#E6EEEE" touchable="false" text="BMW i3" />
+  <Text x="(0.34*#view_width)" y="(0.205*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#9AB9B6" touchable="false" text="eDrive35L" />
+  <Text x="(0.34*#view_width)" y="(0.267*#view_height)" size="(9*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B9D2CD" touchable="false" w="(0.13*#view_width)" text="远程控车" visibility="1" name="bmwStatusBaseline" />
+  <Text x="(0.34*#view_width)" y="(0.335*#view_height)" size="(6.8*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#99BCB5" touchable="false" w="(0.615*#view_width)" visibility="gt(#bmwHintUntil,#time_sys)" name="bmwTemporaryHint" textExp="@hint" />
+  <Image src="clock_pill.png" touchable="false" x="(0.805*#view_width)" y="(0.10*#view_height)" w="(0.15*#view_width)" h="(0.10*#view_height)" />
+  <DateTime x="(0.88*#view_width)" y="(0.116*#view_height)" size="(10*#s)" format="HH:mm" align="center" fontPath="/system/fonts/MiSansVF.ttf" color="#C3DEDA" touchable="false" />
+  <Rectangle x="(0.605*#view_width)" y="(0.978*#view_height)" w="(0.07*#view_width)" h="(0.005*#view_height)" fillColor="#9AB4B4" alpha="95" touchable="false" />
+  <Button name="main_lock" x="(0.340*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==0" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/lock.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="锁车" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/lock_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="锁车" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="hint" expression="'· 锁车，查看前屏'" type="string" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="bmwFrontMakeResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontDisplayResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontBundleResult" expression="0" type="number" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" method="makeBasic" returnType="object" errorVar="bmwFrontMakeResult" return="bmwFrontOptions" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="setLaunchDisplayId" paramTypes="int" params="0" errorVar="bmwFrontDisplayResult" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="toBundle" returnType="object" errorVar="bmwFrontBundleResult" return="bmwFrontBundle" />
+        <IfCommand ifCondition="(#bmwFrontMakeResult==1)*(#bmwFrontDisplayResult==1)*(#bmwFrontBundleResult==1)">
+          <Consequent>
+            <IntentCommand action="android.intent.action.VIEW" uri="de.bmw.connected.mobile20.cn://route/vehicle?remoteService=lock" package="de.bmw.connected.mobile20.cn" flags="335544320" class="com.mobileconnected.MainActivity" activityOption="bmwFrontBundle">
+              <Fallback>
+                <VariableCommand name="hint" expression="'· App 未能打开'" type="string" />
+                <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+              </Fallback>
+            </IntentCommand>
+          </Consequent>
+          <Alternate>
+            <VariableCommand name="hint" type="string" expression="'· 启动配置失败'" />
+            <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </Triggers>
+  </Button>
+  <Button name="main_unlock" x="(0.500*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==0" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/unlock.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="解锁" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/unlock_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="解锁" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="page" expression="0" type="number" />
+        <VariableCommand name="hint" expression="'· 解锁，查看前屏'" type="string" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="bmwFrontMakeResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontDisplayResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontBundleResult" expression="0" type="number" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" method="makeBasic" returnType="object" errorVar="bmwFrontMakeResult" return="bmwFrontOptions" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="setLaunchDisplayId" paramTypes="int" params="0" errorVar="bmwFrontDisplayResult" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="toBundle" returnType="object" errorVar="bmwFrontBundleResult" return="bmwFrontBundle" />
+        <IfCommand ifCondition="(#bmwFrontMakeResult==1)*(#bmwFrontDisplayResult==1)*(#bmwFrontBundleResult==1)">
+          <Consequent>
+            <IntentCommand action="android.intent.action.VIEW" uri="de.bmw.connected.mobile20.cn://route/vehicle?remoteService=unlock" package="de.bmw.connected.mobile20.cn" flags="335544320" class="com.mobileconnected.MainActivity" activityOption="bmwFrontBundle">
+              <Fallback>
+                <VariableCommand name="hint" expression="'· App 未能打开'" type="string" />
+                <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+              </Fallback>
+            </IntentCommand>
+          </Consequent>
+          <Alternate>
+            <VariableCommand name="hint" type="string" expression="'· 启动配置失败'" />
+            <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </Triggers>
+  </Button>
+  <Button name="main_climatize" x="(0.660*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==0" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/climatize.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="空调" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/climatize_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="空调" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="hint" type="string" expression="'正在提交本机任务…'" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="nonceCloudClimate" type="number" expression="#time_sys" />
+        <BinderCommand name="CloudClimate" command="refresh" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="1000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="3500" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="7000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="12000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="20000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="35000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="50000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="70000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="100000" />
+      </Trigger>
+    </Triggers>
+  </Button>
+  <Button name="main_lights" x="(0.820*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==0" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/lights.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="闪灯" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/lights_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(((0.145*#view_width))/2)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="闪灯" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="hint" type="string" expression="'正在提交本机任务…'" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="nonceCloudLights" type="number" expression="#time_sys" />
+        <BinderCommand name="CloudLights" command="refresh" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="1000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="3500" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="7000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="12000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="20000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="35000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="50000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="70000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="100000" />
+      </Trigger>
+    </Triggers>
+  </Button>
+  <Button name="more_horn" x="(0.340*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==1" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/horn.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="鸣笛" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/horn_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="鸣笛" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="hint" type="string" expression="'正在提交本机任务…'" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="nonceCloudHorn" type="number" expression="#time_sys" />
+        <BinderCommand name="CloudHorn" command="refresh" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="1000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="3500" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="7000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="12000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="20000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="35000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="50000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="70000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="100000" />
+      </Trigger>
+    </Triggers>
+  </Button>
+  <Button name="more_locate" x="(0.820*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==1" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/locate.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="定位" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/locate_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="定位" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="hint" expression="'· 定位，查看前屏'" type="string" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="bmwFrontMakeResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontDisplayResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontBundleResult" expression="0" type="number" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" method="makeBasic" returnType="object" errorVar="bmwFrontMakeResult" return="bmwFrontOptions" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="setLaunchDisplayId" paramTypes="int" params="0" errorVar="bmwFrontDisplayResult" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="toBundle" returnType="object" errorVar="bmwFrontBundleResult" return="bmwFrontBundle" />
+        <IfCommand ifCondition="(#bmwFrontMakeResult==1)*(#bmwFrontDisplayResult==1)*(#bmwFrontBundleResult==1)">
+          <Consequent>
+            <IntentCommand action="android.intent.action.VIEW" uri="de.bmw.connected.mobile20.cn://route/destinations?locateVehicle=true" package="de.bmw.connected.mobile20.cn" flags="335544320" class="com.mobileconnected.MainActivity" activityOption="bmwFrontBundle">
+              <Fallback>
+                <VariableCommand name="hint" expression="'· App 未能打开'" type="string" />
+                <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+              </Fallback>
+            </IntentCommand>
+          </Consequent>
+          <Alternate>
+            <VariableCommand name="hint" type="string" expression="'· 启动配置失败'" />
+            <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </Triggers>
+  </Button>
+  <Button name="more_openapp" x="(0.660*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==1" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/openapp.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="打开 App" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/openapp_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="打开 App" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="hint" expression="'· 正在打开前屏'" type="string" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="bmwFrontMakeResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontDisplayResult" expression="0" type="number" />
+        <VariableCommand name="bmwFrontBundleResult" expression="0" type="number" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" method="makeBasic" returnType="object" errorVar="bmwFrontMakeResult" return="bmwFrontOptions" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="setLaunchDisplayId" paramTypes="int" params="0" errorVar="bmwFrontDisplayResult" />
+        <MethodCommand class="android.app.ActivityOptions" targetType="var" target="bmwFrontOptions" method="toBundle" returnType="object" errorVar="bmwFrontBundleResult" return="bmwFrontBundle" />
+        <IfCommand ifCondition="(#bmwFrontMakeResult==1)*(#bmwFrontDisplayResult==1)*(#bmwFrontBundleResult==1)">
+          <Consequent>
+            <IntentCommand class="com.mobileconnected.MainActivity" action="android.intent.action.MAIN" category="android.intent.category.LAUNCHER" package="de.bmw.connected.mobile20.cn" flags="335544320" activityOption="bmwFrontBundle">
+              <Fallback>
+                <VariableCommand name="hint" expression="'· App 未能打开'" type="string" />
+                <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+              </Fallback>
+            </IntentCommand>
+          </Consequent>
+          <Alternate>
+            <VariableCommand name="hint" type="string" expression="'· 启动配置失败'" />
+            <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+          </Alternate>
+        </IfCommand>
+      </Trigger>
+    </Triggers>
+  </Button>
+  <Button name="navigation" x="(0.805*#view_width)" y="(0.235*#view_height)" w="(0.15*#view_width)" h="(0.12*#view_height)" visibility="1" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Text x="(0.075*#view_width)" y="(0.03*#view_height)" size="(8*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#9EBDB7" touchable="false" textExp="ifelse(#page==0,'更多 ›','返回 ‹')" align="center" />
+    </Normal>
+    <Pressed>
+      <Text x="(0.075*#view_width)" y="(0.03*#view_height)" size="(8*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" textExp="ifelse(#page==0,'更多 ›','返回 ‹')" align="center" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="page" expression="ifelse(#page==0,1,0)" type="number" />
+      </Trigger>
+    </Triggers>
+  </Button>
+  <ExternalCommands>
+    <Trigger action="resume">
+      <VariableCommand name="hint" type="string" expression="'远程控车'" />
+      <VariableCommand name="bmwHintUntil" type="number" expression="0" />
+    </Trigger>
+    <Trigger action="resume">
+      <VariableCommand name="nonceCloudClimate" type="number" expression="0" />
+      <VariableCommand name="nonceCloudLights" type="number" expression="0" />
+      <VariableCommand name="nonceCloudHorn" type="number" expression="0" />
+      <VariableCommand name="nonceCloudRefresh" type="number" expression="0" />
+      <BinderCommand name="CloudStatus" command="refresh" />
+      <BinderCommand name="VehicleCache" command="refresh" />
+      <BinderCommand name="VehicleUpdated" command="refresh" />
+    </Trigger>
+  </ExternalCommands>
+  <Button name="more_refresh" x="(0.500*#view_width)" y="(0.765*#view_height)" w="(0.145*#view_width)" h="(0.20*#view_height)" visibility="#page==1" touchable="true" interceptTouch="true" alignChildren="true" haptic="true">
+    <Normal>
+      <Image src="icons/refresh.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#B7CAC5" touchable="false" align="center" text="更新授权" />
+    </Normal>
+    <Pressed>
+      <Image src="icons/refresh_pressed.png" x="(0.0725*#view_width-13.5*#s)" y="(0.005*#view_height)" w="(27*#s)" h="(27*#s)" touchable="false" />
+      <Text x="(0.0725*#view_width)" y="(0.15*#view_height)" size="(7*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#8AC6FF" touchable="false" align="center" text="更新授权" />
+    </Pressed>
+    <Triggers>
+      <Trigger action="up">
+        <VariableCommand name="hint" type="string" expression="'正在提交本机任务…'" />
+        <VariableCommand name="bmwHintUntil" type="number" expression="#time_sys+4000" />
+        <VariableCommand name="nonceCloudRefresh" type="number" expression="#time_sys" />
+        <BinderCommand name="CloudRefresh" command="refresh" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="1000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="3500" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="7000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="12000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="20000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="35000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="50000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="70000" />
+        <BinderCommand name="CloudStatus" command="refresh" delay="100000" />
+      </Trigger>
+    </Triggers>
+  </Button>
+  <VariableBinders>
+    <ContentProviderBinder name="CloudClimate" uriExp="'content://hk.uwu.reareye.script/component:bmw_i3_cloud/control?key=749e3a09a331bb0c986a32ec059424d6dd97d79799d86811&amp;action=climate&amp;nonce='+#nonceCloudClimate" columns="data,error" queryAtStart="false" updateInterval="0">
+      <Variable name="replyCloudClimate" type="string" column="data" />
+      <Variable name="errorCloudClimate" type="string" column="error" />
+      <Trigger>
+        <VariableCommand name="hint" type="string" expression="ifelse(len(@errorCloudClimate),'脚本未连接',@replyCloudClimate)" />
+        <VariableCommand name="nonceCloudClimate" type="number" expression="0" />
+      </Trigger>
+    </ContentProviderBinder>
+    <ContentProviderBinder name="CloudLights" uriExp="'content://hk.uwu.reareye.script/component:bmw_i3_cloud/control?key=749e3a09a331bb0c986a32ec059424d6dd97d79799d86811&amp;action=lights&amp;nonce='+#nonceCloudLights" columns="data,error" queryAtStart="false" updateInterval="0">
+      <Variable name="replyCloudLights" type="string" column="data" />
+      <Variable name="errorCloudLights" type="string" column="error" />
+      <Trigger>
+        <VariableCommand name="hint" type="string" expression="ifelse(len(@errorCloudLights),'脚本未连接',@replyCloudLights)" />
+        <VariableCommand name="nonceCloudLights" type="number" expression="0" />
+      </Trigger>
+    </ContentProviderBinder>
+    <ContentProviderBinder name="CloudHorn" uriExp="'content://hk.uwu.reareye.script/component:bmw_i3_cloud/control?key=749e3a09a331bb0c986a32ec059424d6dd97d79799d86811&amp;action=horn&amp;nonce='+#nonceCloudHorn" columns="data,error" queryAtStart="false" updateInterval="0">
+      <Variable name="replyCloudHorn" type="string" column="data" />
+      <Variable name="errorCloudHorn" type="string" column="error" />
+      <Trigger>
+        <VariableCommand name="hint" type="string" expression="ifelse(len(@errorCloudHorn),'脚本未连接',@replyCloudHorn)" />
+        <VariableCommand name="nonceCloudHorn" type="number" expression="0" />
+      </Trigger>
+    </ContentProviderBinder>
+    <ContentProviderBinder name="CloudRefresh" uriExp="'content://hk.uwu.reareye.script/component:bmw_i3_cloud/control?key=749e3a09a331bb0c986a32ec059424d6dd97d79799d86811&amp;action=refresh&amp;nonce='+#nonceCloudRefresh" columns="data,error" queryAtStart="false" updateInterval="0">
+      <Variable name="replyCloudRefresh" type="string" column="data" />
+      <Variable name="errorCloudRefresh" type="string" column="error" />
+      <Trigger>
+        <VariableCommand name="hint" type="string" expression="ifelse(len(@errorCloudRefresh),'脚本未连接',@replyCloudRefresh)" />
+        <VariableCommand name="nonceCloudRefresh" type="number" expression="0" />
+      </Trigger>
+    </ContentProviderBinder>
+    <ContentProviderBinder name="CloudStatus" uri="content://hk.uwu.reareye.script/component:bmw_i3_cloud/card_status" columns="data,error" queryAtStart="false" updateInterval="0">
+      <Variable name="cloudStatusText" type="string" column="data" />
+      <Trigger condition="len(@cloudStatusText)">
+        <VariableCommand name="bmwHintUntil" type="number" expression="ifelse(eqs(@hint,@cloudStatusText),#bmwHintUntil,#time_sys+4000)" />
+        <VariableCommand name="hint" type="string" expression="@cloudStatusText" />
+      </Trigger>
+    </ContentProviderBinder>
+    <ContentProviderBinder name="VehicleCache" uri="content://hk.uwu.reareye.script/component:bmw_i3_cloud/vehicle_cache" columns="data,error" queryAtStart="true" updateInterval="60">
+      <Variable name="vehicleCacheText" type="string" column="data" />
+    </ContentProviderBinder>
+    <ContentProviderBinder name="VehicleUpdated" uri="content://hk.uwu.reareye.script/component:bmw_i3_cloud/vehicle_updated" columns="data,error" queryAtStart="true" updateInterval="60">
+      <Variable name="vehicleUpdatedText" type="string" column="data" />
+    </ContentProviderBinder>
+  </VariableBinders>
+  <Var name="nonceCloudClimate" type="number" expression="0" const="true" />
+  <Var name="replyCloudClimate" type="string" expression="''" const="true" />
+  <Var name="errorCloudClimate" type="string" expression="''" const="true" />
+  <Var name="nonceCloudLights" type="number" expression="0" const="true" />
+  <Var name="replyCloudLights" type="string" expression="''" const="true" />
+  <Var name="errorCloudLights" type="string" expression="''" const="true" />
+  <Var name="nonceCloudHorn" type="number" expression="0" const="true" />
+  <Var name="replyCloudHorn" type="string" expression="''" const="true" />
+  <Var name="errorCloudHorn" type="string" expression="''" const="true" />
+  <Var name="nonceCloudRefresh" type="number" expression="0" const="true" />
+  <Var name="replyCloudRefresh" type="string" expression="''" const="true" />
+  <Var name="errorCloudRefresh" type="string" expression="''" const="true" />
+  <Var name="cloudStatusText" type="string" expression="''" const="true" />
+  <Var name="vehicleCacheText" type="string" expression="'电量 --%  ·  续航 -- km'" const="true" />
+  <Var name="vehicleUpdatedText" type="string" expression="'尚无缓存'" const="true" />
+  <Text name="bmwVehicleTelemetry" x="(0.34*#view_width)" y="(0.690*#view_height)" w="(0.435*#view_width)" size="(8*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#C6DCD7" touchable="false" textExp="@vehicleCacheText" />
+  <Text name="bmwVehicleCacheTime" x="(0.965*#view_width)" y="(0.703*#view_height)" w="(0.185*#view_width)" align="right" size="(5.2*#s)" fontPath="/system/fonts/MiSansVF.ttf" color="#799C95" touchable="false" textExp="@vehicleUpdatedText" />
+</Widget>
