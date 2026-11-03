@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WidgetConfig>
+  <Text name="bmwDisplayName" displayTitle="汽车名称" editable="true" minLength="1" maxLength="24" group="1" hint="例如：BMW i4、我的宝马">
+    <item>BMW i3</item>
+  </Text>
+  <Text name="bmwDisplayModel" displayTitle="型号／配置" editable="true" minLength="0" maxLength="32" group="1" hint="例如：eDrive35L、xDrive40，可留空">
+    <item>eDrive35L</item>
+  </Text>
+  <ImagePick name="bmwCustomImage" displayTitle="汽车图片（从相册导入，建议透明 PNG）" group="2" />
+  <OnOff name="bmwUseCustomImage" displayTitle="使用自定义车图（关闭后恢复默认车图）" default="1" group="2" />
+  <SeekBar name="bmwCarScale" displayTitle="车图大小（100 为默认）" default="100" from="60" to="150" group="2" />
+  <SeekBar name="bmwCarOffsetX" displayTitle="车图左右位置（负数向左，正数向右）" default="0" from="-100" to="100" group="2" />
+  <SeekBar name="bmwCarOffsetY" displayTitle="车图上下位置（负数向上，正数向下）" default="0" from="-100" to="100" group="2" />
+  <FontSize name="bmwNameSize" displayTitle="名称字号（名称较长时可调小）" default="20" from="12" to="24" group="3" />
+  <FontSize name="bmwModelSize" displayTitle="型号字号" default="7" from="6" to="10" group="3" />
+</WidgetConfig>
