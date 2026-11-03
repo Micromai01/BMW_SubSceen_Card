@@ -1,6 +1,6 @@
 # 宝马车控 — REAREye背屏组件
 为Xiaomi带有背屏的设备制作的 BMW 车控卡片。
-可查看车辆剩余电量、续航，使用空调、闪灯、鸣笛入口，并自定义汽车名称、型号和图片。
+- 可查看车辆剩余电量、续航，使用空调、闪灯、鸣笛入口，并自定义汽车名称、型号和图片。
 
 <img width="2010" height="1508" alt="IMG_20261103_093538" src="https://github.com/user-attachments/assets/75780b7a-74b8-4dce-a78d-7d7d192f4589" />
 
