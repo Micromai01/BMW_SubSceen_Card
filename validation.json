@@ -70,5 +70,17 @@
   "source_archive_reference_self_contained": true,
   "readme_rewritten_for_release": true,
   "release_notes_included": true,
-  "remote_published_by_assistant": false
+  "remote_published_by_assistant": false,
+  "mybmw_6_11_0_hotfix": {
+    "date_utc": "2026-11-21",
+    "app_version": "6.11.0",
+    "app_version_code": 56317,
+    "storage_layout_unchanged": true,
+    "token_sync_on_phone_verified": true,
+    "cloud_state_get_http_status": 200,
+    "hidden_host_binding": "BOUND_CONFIRMED",
+    "mount_namespace_reexec_verified": true,
+    "long_term_token_renewal_verified": false,
+    "published_to_github": true
+  }
 }
