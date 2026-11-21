@@ -1,5 +1,5 @@
 {
-  "release": "1.1",
+  "release": "1.2",
   "date_utc": "2026-11-02",
   "offline_tests_passed": 35,
   "test_suites": {
@@ -40,7 +40,7 @@
   },
   "runtime_diff_only_version_labels": false,
   "readme_rewritten_for_current_usage": true,
-  "configuration_revision": "1.1-appearance-bridge-1",
+  "configuration_revision": "1.2",
   "runtime_identical_to_previous_v1_1": false,
   "reported_configuration_saved_but_not_reflected": true,
   "configuration_fix_on_phone_verified": false,
@@ -80,6 +80,17 @@
     "cloud_state_get_http_status": 200,
     "hidden_host_binding": "BOUND_CONFIRMED",
     "mount_namespace_reexec_verified": true,
+    "long_term_token_renewal_verified": false,
+    "published_to_github": true
+  },
+  "v1_2_release": {
+    "date_utc": "2026-11-21",
+    "version_bump": "1.1 -> 1.2",
+    "mybmw_compat": "6.11.0 (56317)",
+    "mount_namespace_reexec": true,
+    "token_sync_on_phone_verified": true,
+    "cloud_state_get_http_status": 200,
+    "hidden_host_binding": "BOUND_CONFIRMED",
     "long_term_token_renewal_verified": false,
     "published_to_github": true
   }
