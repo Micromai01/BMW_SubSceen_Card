@@ -3,6 +3,7 @@
 set -eu
 umask 077
 BASE=/data/adb/bmw-reareye-native-v2
+if grep -q " /data/data " /proc/self/mountinfo 2>/dev/null; then exec /system/bin/su -M 0 -c "/system/bin/sh $0"; fi
 PKG=de.bmw.connected.mobile20.cn
 DATA=/data/user/0/$PKG
 DIAG=$BASE/auth_diag.txt
@@ -18,8 +19,8 @@ trap on_exit EXIT
 trap 'finish SYNC_TIMEOUT; exit 1' HUP INT TERM
 finish READING
 if ! /system/bin/dumpsys package "$PKG" > "$BASE/package_info.txt" 2>/dev/null; then finish PACKAGE_INFO_UNAVAILABLE; exit 0; fi
-if ! grep -Eq 'versionName=6[.]9[.]0([[:space:]]|$)' "$BASE/package_info.txt"; then finish VERSION_UNSUPPORTED; exit 0; fi
-if ! grep -Eq 'versionCode=54521([[:space:]]|$)' "$BASE/package_info.txt"; then finish VERSION_UNSUPPORTED; exit 0; fi
+if ! grep -Eq 'versionName=6[.]11[.]0([[:space:]]|$)' "$BASE/package_info.txt"; then finish VERSION_UNSUPPORTED; exit 0; fi
+if ! grep -Eq 'versionCode=56317([[:space:]]|$)' "$BASE/package_info.txt"; then finish VERSION_UNSUPPORTED; exit 0; fi
 if ! ( : < "$DATA/shared_prefs/FlutterSecureStorage.xml" ) 2>/dev/null; then
     DATA=/data/data/$PKG
 fi

@@ -1,6 +1,7 @@
 #!/system/bin/sh
 set -eu
 umask 077
+if grep -q " /data/data " /proc/self/mountinfo 2>/dev/null; then exec /system/bin/su -M 0 -c "/system/bin/sh $0 $*"; fi
 BASE=/data/adb/bmw-reareye-async-v3
 case "${1:-}" in runtime|scheduler|telemetry|check|refresh|rebind|climate|lights|horn|hidden_setup|hidden_enable|hidden_inspect|hidden_remove) ;; *) exit 2;; esac
 if [ "$1" = scheduler ] && [ -f "$BASE/scheduler.stop" ]; then printf SCHEDULER_DISABLED; exit 0; fi
