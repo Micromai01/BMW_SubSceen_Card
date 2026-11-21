@@ -149,7 +149,7 @@ local function link(_,_,ctx)
     if err then return err end
     local project=tostring(ctx.projectId or 'unknown')
     if not project:match('^[A-Za-z0-9_:.-]+$') then project='unknown' end
-    local lines={'脚本版本=1.2','脚本项目='..project,'本机任务已接收='..(receipt and LABELS[receipt.action] and '是' or '暂无')}
+    local lines={'脚本版本=1.3','脚本项目='..project,'本机任务已接收='..(receipt and LABELS[receipt.action] and '是' or '暂无')}
     lines[#lines+1]=describe(state,receipt,ctx)
     if state and type(state.phase)=='string' and state.phase:match('^[A-Z_]+$') then lines[#lines+1]='阶段='..state.phase end
     if state and type(state.http_status)=='number' and state.http_status>=100 and state.http_status<=599 then
@@ -254,7 +254,7 @@ end
 local bootstrap=require('lib.bootstrap')
 local function store_init(_,_,ctx) return bootstrap.start(ctx,h,VERSION) end
 local function store_status(_,_,ctx) return bootstrap.status(ctx,h) end
-return {id='bmw_i3_async_cloud',name='BMW 车控 v1.2 · 自定义车型',
+return {id='bmw_i3_async_cloud',name='BMW 车控 v1.3 · 自定义车型',
     description='按钮读取本机新授权后单次提交；车况独立整点更新，夜间暂停；授权不可用时转前屏App。',
     configs=appearance.configs,
     providers={appearance=appearance.payload,appearance_status=appearance.status,appearance_sources=appearance.sources,setup_new=setup_new,hidden_enable=hidden_enable,hidden_inspect=hidden_inspect,hidden_remove=hidden_remove,hidden_status=hidden_status,bootstrap=store_init,bootstrap_status=store_status,setup=setup,runtime=runtime,cloud_check=cloud_check,status=status,card_status=card_status,
